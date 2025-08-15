@@ -49,8 +49,10 @@ app.add_middleware(
 )
 
 # Incluir routers
-from app.routers import users
+from app.routers import users, products, sales
 app.include_router(users.router, prefix="/api/v1")
+app.include_router(products.router, prefix="/api/v1")
+app.include_router(sales.router, prefix="/api/v1")
 
 # Rota raiz
 @app.get("/")

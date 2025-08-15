@@ -45,7 +45,8 @@ python app/init_db.py
 
 #### Teste manual (demonstração):
 ```bash
-python test/test_sqlite.py
+python test/test_sqlite.py          # Teste básico
+python test/test_products_sales.py  # Teste completo de produtos e vendas
 ```
 
 #### Testes unitários:
@@ -136,6 +137,27 @@ A API estará disponível em: http://localhost:8001
 - `PUT /api/v1/users/{id}` - Atualizar usuário
 - `DELETE /api/v1/users/{id}` - Deletar usuário
 
+#### Produtos
+- `POST /api/v1/products/` - Criar produto
+- `GET /api/v1/products/` - Listar produtos
+- `GET /api/v1/products/{id}` - Obter produto por ID
+- `GET /api/v1/products/search?name=` - Buscar por nome
+- `GET /api/v1/products/in-stock` - Produtos em estoque
+- `PUT /api/v1/products/{id}` - Atualizar produto
+- `PATCH /api/v1/products/{id}/stock?quantity_change=` - Atualizar estoque
+- `DELETE /api/v1/products/{id}` - Deletar produto (soft delete)
+
+#### Vendas
+- `POST /api/v1/sales/` - Criar venda
+- `GET /api/v1/sales/` - Listar vendas
+- `GET /api/v1/sales/{id}` - Obter venda por ID
+- `GET /api/v1/sales/user/{user_id}` - Vendas por usuário
+- `GET /api/v1/sales/product/{product_id}` - Vendas por produto
+- `GET /api/v1/sales/today` - Vendas de hoje
+- `GET /api/v1/sales/summary` - Resumo de vendas
+- `GET /api/v1/sales/date-range?start_date=&end_date=` - Vendas por período
+- `DELETE /api/v1/sales/{id}` - Cancelar venda
+
 ### 📚 Documentação
 - Swagger UI: http://localhost:8000/docs
 - ReDoc: http://localhost:8000/redoc
@@ -158,7 +180,8 @@ sales-portal-api/
 │   ├── run_tests.py    # Executar todos os testes
 │   ├── test_api.py     # Testes de integração das APIs
 │   ├── test_models.py  # Testes unitários dos modelos
-│   └── test_sqlite.py  # Teste manual/demonstração
+│   ├── test_sqlite.py  # Teste manual/demonstração
+│   └── test_products_sales.py  # Teste completo produtos/vendas
 └── app/                # Pacote principal da aplicação
     ├── __init__.py
     ├── database.py     # Configuração do banco
@@ -168,8 +191,13 @@ sales-portal-api/
     │   └── __init__.py # User, Product, Sale
     ├── routers/        # Rotas da API
     │   ├── __init__.py
-    │   └── users.py    # CRUD de usuários
+    │   ├── users.py    # CRUD de usuários
+    │   ├── products.py # CRUD de produtos
+    │   └── sales.py    # CRUD de vendas
     └── services/       # Lógica de negócio
+        ├── __init__.py
+        ├── product_service.py  # Serviços de produtos
+        └── sales_service.py    # Serviços de vendas
 ```
 
 ## Comandos Úteis

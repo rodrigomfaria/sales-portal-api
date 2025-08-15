@@ -67,16 +67,24 @@ class SaleBase(BaseModel):
     user_id: int
     product_id: int
     quantity: int
+    unit_price: Optional[float] = None  # Se não fornecido, usa preço do produto
+    total_price: Optional[float] = None  # Calculado automaticamente
+
+
+class SaleCreate(BaseModel):
+    user_id: int
+    product_id: int
+    quantity: int
+    unit_price: Optional[float] = None  # Opcional - usa preço do produto se não fornecido
+
+
+class Sale(BaseModel):
+    id: int
+    user_id: int
+    product_id: int
+    quantity: int
     unit_price: float
     total_price: float
-
-
-class SaleCreate(SaleBase):
-    pass
-
-
-class Sale(SaleBase):
-    id: int
     sale_date: datetime
     created_at: datetime
 
