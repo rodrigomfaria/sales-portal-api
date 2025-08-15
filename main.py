@@ -1,7 +1,10 @@
 import os
 import logging
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.database import engine
+from app.models import Base
 
 # Configurar logging para debug
 logging.basicConfig(
@@ -11,12 +14,29 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Gerenciador de ciclo de vida da aplicação
+    """
+    # Startup
+    logger.info("Aplicação iniciada")
+    # Nota: Tabelas são criadas via migrations (alembic)
+    
+    yield
+    
+    # Shutdown
+    logger.info("Aplicação finalizada")
+
+
 # Criar instância do FastAPI
 app = FastAPI(
     title="Sales Portal API",
-    description="API para portal de vendas",
+    description="API para portal de vendas com SQLite",
     version="1.0.0",
-    debug=os.getenv("DEBUG", "false").lower() == "true"
+    debug=os.getenv("DEBUG", "false").lower() == "true",
+    lifespan=lifespan
 )
 
 # Configurar CORS
@@ -27,6 +47,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Incluir routers
+from app.routers import users
+app.include_router(users.router, prefix="/api/v1")
 
 # Rota raiz
 @app.get("/")
